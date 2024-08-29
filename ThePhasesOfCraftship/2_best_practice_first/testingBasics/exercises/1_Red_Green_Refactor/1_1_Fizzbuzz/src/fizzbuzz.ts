@@ -7,6 +7,10 @@ export function fizzbuzz(n: number): string {
     throw new Error('argument must be less than or equal to 100');
   }
 
+  if (n < 1) {
+    throw new Error('argument must be greater than or equal to 1');
+  }
+
   if (n % 3 === 0 && n % 5 === 0) {
     return 'fizzbuzz';
   }

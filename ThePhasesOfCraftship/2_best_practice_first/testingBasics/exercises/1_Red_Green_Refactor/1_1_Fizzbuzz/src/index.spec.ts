@@ -46,4 +46,8 @@ describe('fizzbuzz', () => {
   it('should throw an error if n is greater than 100', () => {
     expect(() => fizzbuzz(101)).toThrowError();
   });
+
+  it('should throw and error if n is less than 1', () => {
+    expect(() => fizzbuzz(-12)).toThrowError();
+  });
 });
