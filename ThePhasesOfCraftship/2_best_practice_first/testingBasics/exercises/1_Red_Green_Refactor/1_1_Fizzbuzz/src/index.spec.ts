@@ -30,4 +30,12 @@ describe('fizzbuzz', () => {
 
     expect(fizzbuzz(30)).toBe('fizzbuzz');
   });
+
+  it('should return string for non-multiples of 3 and 5', () => {
+    expect(fizzbuzz(1)).toBe('1');
+
+    expect(fizzbuzz(2)).toBe('2');
+
+    expect(fizzbuzz(11)).toBe('11');
+  });
 });

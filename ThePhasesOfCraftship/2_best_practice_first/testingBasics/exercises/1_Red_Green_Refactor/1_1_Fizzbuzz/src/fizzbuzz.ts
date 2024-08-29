@@ -11,5 +11,5 @@ export function fizzbuzz(n: number): string {
     return 'buzz';
   }
 
-  return '';
+  return n.toString();
 }
