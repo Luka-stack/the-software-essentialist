@@ -3,6 +3,10 @@ export function fizzbuzz(n: number): string {
     throw new Error('argument must be a number');
   }
 
+  if (n > 100) {
+    throw new Error('argument must be less than or equal to 100');
+  }
+
   if (n % 3 === 0 && n % 5 === 0) {
     return 'fizzbuzz';
   }
