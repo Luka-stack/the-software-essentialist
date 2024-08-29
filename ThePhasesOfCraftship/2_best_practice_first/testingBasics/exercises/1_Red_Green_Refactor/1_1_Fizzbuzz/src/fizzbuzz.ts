@@ -1,4 +1,8 @@
 export function fizzbuzz(n: number): string {
+  if (typeof n !== 'number') {
+    throw new Error('argument must be a number');
+  }
+
   if (n % 3 === 0 && n % 5 === 0) {
     return 'fizzbuzz';
   }

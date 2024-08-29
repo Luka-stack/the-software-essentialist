@@ -38,4 +38,8 @@ describe('fizzbuzz', () => {
 
     expect(fizzbuzz(11)).toBe('11');
   });
+
+  it('should throw an error if n is not a number', () => {
+    expect(() => fizzbuzz('1' as any)).toThrowError();
+  });
 });
