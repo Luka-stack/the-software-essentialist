@@ -5,27 +5,52 @@ describe('palindrome checker', () => {
     expect(typeof isPalindrome).toEqual('function');
   });
 
-  it('should return true if lowercase input without spaces is a palindrome', () => {
-    expect(isPalindrome('mom')).toBe(true);
-  });
+  it.each(['mom', 'xmomx'])(
+    'should return true if lowercase input without spaces is a palindrome',
+    (n) => {
+      expect(isPalindrome(n)).toBe(true);
+    }
+  );
 
-  it('should return false if a lowercase input without spaces is not a palindrome', () => {
-    expect(isPalindrome('hello')).toBe(false);
-  });
+  it.each(['hello', 'cat'])(
+    'should return false if a lowercase input without spaces is not a palindrome',
+    (n) => {
+      expect(isPalindrome(n)).toBe(false);
+    }
+  );
 
-  it('should return true if input is a palindrome without considering case and spaces', () => {
-    expect(isPalindrome('Mom')).toBe(true);
-  });
+  it.each(['MoM', 'xDoGoDx'])(
+    'should return true if input is a palindrome without considering case and spaces',
+    (n) => {
+      expect(isPalindrome(n)).toBe(true);
+    }
+  );
 
-  it('should return false if input is not a palindrome without considering case and spaces', () => {
-    expect(isPalindrome('Hello')).toBe(false);
-  });
+  it.each(['HeLLO', 'EighT', 'One'])(
+    'should return false if input is not a palindrome without considering case and spaces',
+    (n) => {
+      expect(isPalindrome(n)).toBe(false);
+    }
+  );
 
-  it('should return true if a sentence with spaces is a palindrome without considering casing', () => {
-    expect(isPalindrome('Was It A Rat I Saw')).toBe(true);
-  });
+  it.each(['Was It A Rat I Saw', 'Never Odd or Even'])(
+    'should return true if a sentence with spaces is a palindrome without considering casing',
+    (n) => {
+      expect(isPalindrome(n)).toBe(true);
+    }
+  );
 
-  it('should return true if a sentence without spaces is a palindrome without considering casing', () => {
-    expect(isPalindrome('WasItARatISaw')).toBe(true);
-  });
+  it.each(['WasItARatISaw', 'NeverOddorEven'])(
+    'should return true if a sentence with spaces is a palindrome without considering casing',
+    (n) => {
+      expect(isPalindrome(n)).toBe(true);
+    }
+  );
+
+  it.each(['Never Odd or Even1'])(
+    'should return true if a sentence without spaces is a palindrome without considering casing',
+    () => {
+      expect(isPalindrome('WasItARatISaw')).toBe(true);
+    }
+  );
 });
