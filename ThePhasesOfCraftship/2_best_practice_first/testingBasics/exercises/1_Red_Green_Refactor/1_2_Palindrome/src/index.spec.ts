@@ -21,7 +21,11 @@ describe('palindrome checker', () => {
     expect(isPalindrome('Hello')).toBe(false);
   });
 
-  it('should return true if a sentence with spaces is a palindrome without considering', () => {
+  it('should return true if a sentence with spaces is a palindrome without considering casing', () => {
     expect(isPalindrome('Was It A Rat I Saw')).toBe(true);
+  });
+
+  it('should return true if a sentence without spaces is a palindrome without considering casing', () => {
+    expect(isPalindrome('WasItARatISaw')).toBe(true);
   });
 });
