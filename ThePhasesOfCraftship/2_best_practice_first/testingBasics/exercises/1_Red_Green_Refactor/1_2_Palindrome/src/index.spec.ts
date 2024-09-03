@@ -20,4 +20,8 @@ describe('palindrome checker', () => {
   it('should return false if input is not a palindrome without considering case and spaces', () => {
     expect(isPalindrome('Hello')).toBe(false);
   });
+
+  it('should return true if a sentence with spaces is a palindrome without considering', () => {
+    expect(isPalindrome('Was It A Rat I Saw')).toBe(true);
+  });
 });
