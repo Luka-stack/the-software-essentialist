@@ -5,7 +5,11 @@ describe('palindrome checker', () => {
     expect(typeof isPalindrome).toEqual('function');
   });
 
-  it('should return true if lower case string is a palindrome', () => {
+  it('should return true if lowercase string is a palindrome', () => {
     expect(isPalindrome('mom')).toBe(true);
+  });
+
+  it('should return false if a lowercase string is not a palindrome', () => {
+    expect(isPalindrome('hello')).toBe(false);
   });
 });
