@@ -5,19 +5,19 @@ describe('palindrome checker', () => {
     expect(typeof isPalindrome).toEqual('function');
   });
 
-  it('should return true if lowercase string without spaces is a palindrome', () => {
+  it('should return true if lowercase input without spaces is a palindrome', () => {
     expect(isPalindrome('mom')).toBe(true);
   });
 
-  it('should return false if a lowercase string without spaces is not a palindrome', () => {
+  it('should return false if a lowercase input without spaces is not a palindrome', () => {
     expect(isPalindrome('hello')).toBe(false);
   });
 
-  it('should return true if string is a palindrome without considering case and spaces', () => {
+  it('should return true if input is a palindrome without considering case and spaces', () => {
     expect(isPalindrome('Mom')).toBe(true);
   });
 
-  it('should return false if string is not a palindrome without considering case and spaces', () => {
+  it('should return false if input is not a palindrome without considering case and spaces', () => {
     expect(isPalindrome('Hello')).toBe(false);
   });
 });
