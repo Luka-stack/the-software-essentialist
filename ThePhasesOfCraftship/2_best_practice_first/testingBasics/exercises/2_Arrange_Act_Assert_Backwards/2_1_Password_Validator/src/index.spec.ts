@@ -11,4 +11,11 @@ describe('password validator', () => {
     expect(result.result).toBe(false);
     expect(result.errors).toContain(PasswordError.LENGTH);
   });
+
+  test('that input is noy valid if length is more than 15', () => {
+    const result = passwordValidator('asdfghjkklpoiuytrewq');
+
+    expect(result.result).toBe(false);
+    expect(result.errors).toContain(PasswordError.LENGTH);
+  });
 });

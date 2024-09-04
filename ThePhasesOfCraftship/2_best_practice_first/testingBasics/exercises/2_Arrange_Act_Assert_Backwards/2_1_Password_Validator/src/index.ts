@@ -24,5 +24,5 @@ export function passwordValidator(password: string): ValidationResult {
 }
 
 function isLengthValid(password: string): boolean {
-  return password.length >= 5;
+  return password.length >= 5 && password.length <= 15;
 }
