@@ -1,9 +1,7 @@
+import { passwordValidator } from './index';
 
 describe('password validator', () => {
-
-  test('hello', () => {
-    expect("between 5 and 15").toContain('5 and 15')
-  })
-})
-
-
+  test('that function is defined', () => {
+    expect(passwordValidator).toBeDefined();
+  });
+});
