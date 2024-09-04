@@ -32,4 +32,12 @@ describe('password validator', () => {
     expect(result.result).toBe(false);
     expect(result.errors).toContain(PasswordError.UPPERCASE);
   });
+
+  test('that invalid result contains all errors', () => {
+    const result = passwordValidator('asd');
+
+    expect(result.errors).toContain(PasswordError.LENGTH);
+    expect(result.errors).toContain(PasswordError.NUMBER);
+    expect(result.errors).toContain(PasswordError.UPPERCASE);
+  });
 });
