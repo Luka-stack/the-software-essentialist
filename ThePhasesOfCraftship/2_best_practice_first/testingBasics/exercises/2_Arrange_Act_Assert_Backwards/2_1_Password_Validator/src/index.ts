@@ -10,19 +10,26 @@ export enum PasswordError {
 }
 
 export function passwordValidator(password: string): ValidationResult {
+  const errors: PasswordError[] = [];
+
   if (!isLengthValid(password)) {
-    return {
-      result: false,
-      errors: [PasswordError.LENGTH],
-    };
+    errors.push(PasswordError.LENGTH);
+  }
+
+  if (!containsNumber(password)) {
+    errors.push(PasswordError.NUMBER);
   }
 
   return {
-    result: true,
-    errors: [],
+    result: errors.length === 0,
+    errors,
   };
 }
 
 function isLengthValid(password: string): boolean {
   return password.length >= 5 && password.length <= 15;
+}
+
+function containsNumber(password: string): boolean {
+  return /\d/.test(password);
 }
