@@ -40,4 +40,11 @@ describe('password validator', () => {
     expect(result.errors).toContain(PasswordError.NUMBER);
     expect(result.errors).toContain(PasswordError.UPPERCASE);
   });
+
+  test('that input is valid if all conditions are met', () => {
+    const result = passwordValidator('Qwerty1');
+
+    expect(result.result).toBe(true);
+    expect(result.errors).toHaveLength(0);
+  });
 });
