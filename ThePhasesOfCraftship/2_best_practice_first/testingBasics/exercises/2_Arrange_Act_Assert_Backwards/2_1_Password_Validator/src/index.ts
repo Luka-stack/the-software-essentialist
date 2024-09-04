@@ -20,6 +20,10 @@ export function passwordValidator(password: string): ValidationResult {
     errors.push(PasswordError.NUMBER);
   }
 
+  if (!containsUppercase(password)) {
+    errors.push(PasswordError.UPPERCASE);
+  }
+
   return {
     result: errors.length === 0,
     errors,
@@ -32,4 +36,8 @@ function isLengthValid(password: string): boolean {
 
 function containsNumber(password: string): boolean {
   return /\d/.test(password);
+}
+
+function containsUppercase(password: string): boolean {
+  return /[A-Z]/.test(password);
 }

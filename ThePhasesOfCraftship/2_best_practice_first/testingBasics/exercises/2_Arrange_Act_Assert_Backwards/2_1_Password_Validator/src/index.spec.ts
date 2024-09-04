@@ -25,4 +25,11 @@ describe('password validator', () => {
     expect(result.result).toBe(false);
     expect(result.errors).toContain(PasswordError.NUMBER);
   });
+
+  test('that input is not valid if does not contain at least an uppercase letter', () => {
+    const result = passwordValidator('qwerty1');
+
+    expect(result.result).toBe(false);
+    expect(result.errors).toContain(PasswordError.UPPERCASE);
+  });
 });
