@@ -52,4 +52,14 @@ describe('stats calculator', () => {
 
     expect(result.avg).toBeCloseTo(expected.avg, 2);
   });
+
+  it.each([
+    [[1, 2, 3], { min: 1, max: 3, len: 3, avg: 2 }],
+    [[-1, 0, 1], { min: -1, max: 1, len: 3, avg: 0 }],
+    [[1, 1, 1], { min: 1, max: 1, len: 3, avg: 1 }],
+  ])(`should return all stats`, (arr, expected) => {
+    const result = statsCalculator(arr);
+
+    expect(result).toEqual(expected);
+  });
 });
