@@ -13,7 +13,13 @@ describe('stats calculator', () => {
     );
   });
 
-  it('should return min of the array', () => {
-    expect(statsCalculator([1, 2, 3])).toEqual({ min: 1 });
+  it.each([
+    [[1, 2, 3], { min: 1 }],
+    [[-1, 0, 1], { min: -1 }],
+    [[1, 1, 1], { min: 1 }],
+  ])(`should return min of the array`, (arr, expected) => {
+    const result = statsCalculator(arr);
+
+    expect(result.min).toEqual(expected.min);
   });
 });
