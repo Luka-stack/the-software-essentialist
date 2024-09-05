@@ -22,4 +22,14 @@ describe('stats calculator', () => {
 
     expect(result.min).toEqual(expected.min);
   });
+
+  it.each([
+    [[1, 2, 3], { max: 3 }],
+    [[-1, 0, 1], { max: 1 }],
+    [[1, 1, 1], { max: 1 }],
+  ])(`should return max of the array`, (arr, expected) => {
+    const result = statsCalculator(arr);
+
+    expect(result.max).toEqual(expected.max);
+  });
 });

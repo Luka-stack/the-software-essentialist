@@ -1,5 +1,6 @@
 type Stats = {
   min: number;
+  max: number;
 };
 
 export function statsCalculator(arr: number[]) {
@@ -13,11 +14,16 @@ export function statsCalculator(arr: number[]) {
 
   const result: Stats = {
     min: Infinity,
+    max: -Infinity,
   };
 
   for (const num of arr) {
     if (num < result.min) {
       result.min = num;
+    }
+
+    if (num > result.max) {
+      result.max = num;
     }
   }
 
