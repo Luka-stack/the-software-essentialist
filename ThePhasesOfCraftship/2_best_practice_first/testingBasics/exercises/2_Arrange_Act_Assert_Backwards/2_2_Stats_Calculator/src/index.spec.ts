@@ -12,4 +12,8 @@ describe('stats calculator', () => {
       'Input should be an array'
     );
   });
+
+  it('should return min of the array', () => {
+    expect(statsCalculator([1, 2, 3])).toEqual({ min: 1 });
+  });
 });
