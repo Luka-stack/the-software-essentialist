@@ -32,4 +32,14 @@ describe('stats calculator', () => {
 
     expect(result.max).toEqual(expected.max);
   });
+
+  it.each([
+    [[1, 1, 1, 1, 1], { len: 5 }],
+    [[-1, 0, 1], { len: 3 }],
+    [[1], { len: 1 }],
+  ])('should return length of the array', (arr, expected) => {
+    const result = statsCalculator(arr);
+
+    expect(result.len).toEqual(expected.len);
+  });
 });
