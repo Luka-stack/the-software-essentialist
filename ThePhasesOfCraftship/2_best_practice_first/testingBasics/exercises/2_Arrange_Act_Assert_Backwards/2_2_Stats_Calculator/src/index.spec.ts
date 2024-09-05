@@ -42,4 +42,14 @@ describe('stats calculator', () => {
 
     expect(result.len).toEqual(expected.len);
   });
+
+  it.each([
+    [[100, 50, 2], { avg: 50.67 }],
+    [[1, 2, 3], { avg: 2 }],
+    [[-1, 0, 1], { avg: 0 }],
+  ])(`should return average of the array`, (arr, expected) => {
+    const result = statsCalculator(arr);
+
+    expect(result.avg).toBeCloseTo(expected.avg, 2);
+  });
 });

@@ -2,6 +2,7 @@ type Stats = {
   min: number;
   max: number;
   len: number;
+  avg: number;
 };
 
 export function statsCalculator(arr: number[]) {
@@ -17,6 +18,7 @@ export function statsCalculator(arr: number[]) {
     min: Infinity,
     max: -Infinity,
     len: 0,
+    avg: 0,
   };
 
   for (const num of arr) {
@@ -29,7 +31,10 @@ export function statsCalculator(arr: number[]) {
     }
 
     result.len++;
+    result.avg += num;
   }
+
+  result.avg /= result.len;
 
   return result;
 }
