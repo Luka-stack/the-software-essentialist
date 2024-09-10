@@ -3,8 +3,12 @@ export function validateMilitaryTime(timeRange: string): boolean {
     throw new TypeError('Argument must be a string');
   }
 
-  const [startTime, endTime] = timeRange.split(' - ');
-  return isValidTime(startTime) && isValidTime(endTime);
+  try {
+    const [startTime, endTime] = timeRange.split(' - ');
+    return isValidTime(startTime) && isValidTime(endTime);
+  } catch (error) {
+    return false;
+  }
 }
 
 function isValidTime(time: string): boolean {
