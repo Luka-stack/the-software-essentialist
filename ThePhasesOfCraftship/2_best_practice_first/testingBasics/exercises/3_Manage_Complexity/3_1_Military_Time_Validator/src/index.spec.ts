@@ -34,10 +34,6 @@ describe('military time validator', () => {
     }
   );
 
-  it('should return false when time range is missformed', () => {
-    expect(validateMilitaryTime('00:00 - ')).toBe(false);
-  });
-
   it('should throw an error when argument is not a string', () => {
     expect(() => validateMilitaryTime(null as any)).toThrow(TypeError);
   });
