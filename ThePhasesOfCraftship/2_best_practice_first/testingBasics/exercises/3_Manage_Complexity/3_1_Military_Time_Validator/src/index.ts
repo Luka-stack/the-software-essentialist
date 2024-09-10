@@ -1,4 +1,8 @@
 export function validateMilitaryTime(timeRange: string): boolean {
+  if (typeof timeRange !== 'string') {
+    throw new TypeError('Argument must be a string');
+  }
+
   const [startTime, endTime] = timeRange.split(' - ');
   return isValidTime(startTime) && isValidTime(endTime);
 }
