@@ -16,4 +16,8 @@ describe('military time validator', () => {
   it('should return false when end time is invalid', () => {
     expect(validateMilitaryTime('00:00 - 02:60')).toBe(false);
   });
+
+  it('should return false when start time is invalid', () => {
+    expect(validateMilitaryTime('25:00 - 02:23')).toBe(false);
+  });
 });
