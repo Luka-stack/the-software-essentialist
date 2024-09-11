@@ -47,10 +47,6 @@ function toBoolean(value: string): boolean {
   return value.toLowerCase() === 'true' ? true : false;
 }
 
-function toNotBoolean(value: string): boolean {
-  return !toBoolean(value);
-}
-
 function toOperator(value: string): Function {
   if (value.toLowerCase() === 'not') {
     return (value: boolean) => !value;
@@ -58,6 +54,10 @@ function toOperator(value: string): Function {
 
   if (value.toLowerCase() === 'and') {
     return (value1: boolean, value2: boolean) => value1 && value2;
+  }
+
+  if (value.toLowerCase() === 'or') {
+    return (value1: boolean, value2: boolean) => value1 || value2;
   }
 
   return () => false;
@@ -68,7 +68,11 @@ function isBoolean(value: string): boolean {
 }
 
 function isOperator(value: string): boolean {
-  return value.toLowerCase() === 'not' || value.toLowerCase() === 'and';
+  return (
+    value.toLowerCase() === 'not' ||
+    value.toLowerCase() === 'and' ||
+    value.toLowerCase() === 'or'
+  );
 }
 
 function toArray(expression: string): Array<string> {

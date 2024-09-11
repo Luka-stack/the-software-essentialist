@@ -32,4 +32,19 @@ describe('boolean calculator', () => {
       expect(calculateBoolean('false and false')).toBe(false);
     });
   });
+
+  describe('or operator', () => {
+    it('should return true if one value is true', () => {
+      expect(calculateBoolean('true or false')).toBe(true);
+      expect(calculateBoolean('false or true')).toBe(true);
+    });
+
+    it('should return false if both values are false', () => {
+      expect(calculateBoolean('false or false')).toBe(false);
+    });
+
+    it('should return true if both values are true', () => {
+      expect(calculateBoolean('true or true')).toBe(true);
+    });
+  });
 });
