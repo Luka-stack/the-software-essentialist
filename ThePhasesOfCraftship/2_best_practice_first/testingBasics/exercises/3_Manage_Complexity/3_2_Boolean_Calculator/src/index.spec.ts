@@ -5,5 +5,9 @@ describe('boolean calculator', () => {
     it('should return true for "true"', () => {
       expect(calculateBoolean('true')).toBe(true);
     });
+
+    it('should return false for "false"', () => {
+      expect(calculateBoolean('false')).toBe(false);
+    });
   });
 });
