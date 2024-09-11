@@ -1,80 +1,87 @@
 export function calculateBoolean(expression: string): boolean {
-  const result = toArray(expression).reduce<any>(
-    (acc, value) => {
-      if (isOperator(value)) {
-        acc.op = toOperator(value);
-        return acc;
-      }
+  const tokens = tokenize(expression);
 
-      if (isBoolean(value)) {
-        if (acc.val1 === null) {
-          acc.val1 = toBoolean(value);
+  if (!tokens) {
+    return false;
+  }
 
-          if (acc.op) {
-            acc.val1 = acc.op(acc.val1);
-            acc.op = null;
-          }
+  const stack = createStack(tokens);
+  const result = evaluate(stack);
 
-          return acc;
-        }
-
-        if (acc.val2 === null) {
-          acc.val2 = toBoolean(value);
-
-          if (acc.op) {
-            acc.val1 = acc.op(acc.val1, acc.val2);
-            acc.val2 = null;
-            acc.op = null;
-          }
-
-          return acc;
-        }
-      }
-
-      return acc;
-    },
-    {
-      op: null,
-      val1: null,
-      val2: null,
-    }
-  );
-
-  return result.val1;
+  return result;
 }
 
 function toBoolean(value: string): boolean {
   return value.toLowerCase() === 'true' ? true : false;
 }
 
-function toOperator(value: string): Function {
-  if (value.toLowerCase() === 'not') {
-    return (value: boolean) => !value;
-  }
-
-  if (value.toLowerCase() === 'and') {
-    return (value1: boolean, value2: boolean) => value1 && value2;
-  }
-
-  if (value.toLowerCase() === 'or') {
-    return (value1: boolean, value2: boolean) => value1 || value2;
-  }
-
-  return () => false;
-}
-
 function isBoolean(value: string): boolean {
   return value.toLowerCase() === 'true' || value.toLowerCase() === 'false';
 }
 
-function isOperator(value: string): boolean {
-  return (
-    value.toLowerCase() === 'not' ||
-    value.toLowerCase() === 'and' ||
-    value.toLowerCase() === 'or'
-  );
+function isNegation(value: string): boolean {
+  return value.toLowerCase() === 'not';
 }
 
-function toArray(expression: string): Array<string> {
-  return expression.split(' ');
+function isAnd(value: string): boolean {
+  return value.toLowerCase() === 'and';
+}
+
+function isOr(value: string): boolean {
+  return value.toLowerCase() === 'or';
+}
+
+function isOperation(value: string): boolean {
+  return isAnd(value) || isOr(value);
+}
+
+function tokenize(expression: string): RegExpMatchArray | null {
+  return expression.match(/\b(not|and|or|true|false)\b|\(|\)/g);
+}
+
+function createStack(tokens: string[]): Array<boolean | string> {
+  const stack: Array<boolean | string> = [];
+  let index = 0;
+
+  while (index < tokens.length) {
+    const token = tokens[index];
+
+    if (isBoolean(token)) {
+      stack.push(toBoolean(token));
+    } else if (isNegation(token)) {
+      const nextToken = tokens[++index];
+      if (isBoolean(nextToken)) {
+        stack.push(!toBoolean(nextToken));
+      }
+    } else if (isOperation(token)) {
+      stack.push(token);
+    }
+
+    ++index;
+  }
+
+  return stack;
+}
+
+function evaluate(stack: Array<string | boolean>): boolean {
+  let result = stack.shift() as boolean;
+
+  while (stack.length > 0) {
+    const operator = stack.shift() as string;
+    const nextValue = stack.shift() as boolean;
+
+    if (isAnd(operator)) {
+      result = result && nextValue;
+
+      continue;
+    }
+
+    if (isOr(operator)) {
+      result = result || nextValue;
+
+      continue;
+    }
+  }
+
+  return result;
 }

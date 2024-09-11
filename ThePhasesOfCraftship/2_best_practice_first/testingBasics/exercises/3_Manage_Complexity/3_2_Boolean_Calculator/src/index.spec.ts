@@ -47,4 +47,18 @@ describe('boolean calculator', () => {
       expect(calculateBoolean('true or true')).toBe(true);
     });
   });
+
+  describe('combination of operators', () => {
+    it('should return true for "true and true or false"', () => {
+      expect(calculateBoolean('true and true or false')).toBe(true);
+    });
+
+    it('should return true for "true or false and true"', () => {
+      expect(calculateBoolean('true or false and true')).toBe(true);
+    });
+
+    it('should return true for "true and not false"', () => {
+      expect(calculateBoolean('true and not false')).toBe(true);
+    });
+  });
 });
