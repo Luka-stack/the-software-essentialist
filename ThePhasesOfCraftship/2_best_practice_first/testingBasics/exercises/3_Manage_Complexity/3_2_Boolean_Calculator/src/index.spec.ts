@@ -17,4 +17,19 @@ describe('boolean calculator', () => {
       expect(calculateBoolean('not false')).toBe(true);
     });
   });
+
+  describe('and operator', () => {
+    it('should return true if both values are true', () => {
+      expect(calculateBoolean('true and true')).toBe(true);
+    });
+
+    it('should return false if one value is false', () => {
+      expect(calculateBoolean('true and false')).toBe(false);
+      expect(calculateBoolean('false and true')).toBe(false);
+    });
+
+    it('should return false if both values are false', () => {
+      expect(calculateBoolean('false and false')).toBe(false);
+    });
+  });
 });
