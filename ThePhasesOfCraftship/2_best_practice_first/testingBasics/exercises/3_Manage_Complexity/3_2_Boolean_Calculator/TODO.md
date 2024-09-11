@@ -14,7 +14,7 @@
 > "not true" -> false
 > "not false" -> true
 > "not (true or false) -> false"
-> "not true of false" -> false
+> "not true or false" -> false
 > "not" -> throw Error
 > "true not" -> throw Error
 

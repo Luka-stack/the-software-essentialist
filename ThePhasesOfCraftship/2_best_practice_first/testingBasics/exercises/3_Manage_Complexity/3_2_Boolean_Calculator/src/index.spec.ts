@@ -10,4 +10,11 @@ describe('boolean calculator', () => {
       expect(calculateBoolean('false')).toBe(false);
     });
   });
+
+  describe('not operator', () => {
+    it('should negate the next boolean value', () => {
+      expect(calculateBoolean('not true')).toBe(false);
+      expect(calculateBoolean('not false')).toBe(true);
+    });
+  });
 });
