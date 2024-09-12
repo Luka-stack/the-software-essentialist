@@ -5,7 +5,9 @@ export function calculateBoolean(expression: string): boolean {
     return false;
   }
 
-  const stack = createStack(tokens);
+  // const stack = createStack(tokens);
+  const stack: Array<string | boolean> = [];
+  createStackRec(tokens, stack, 0);
   const result = evaluate(stack);
 
   return result;
@@ -45,6 +47,93 @@ function isCloseParenthesis(value: string): boolean {
 
 function tokenize(expression: string): RegExpMatchArray | null {
   return expression.match(/\b(not|and|or|true|false)\b|\(|\)/g);
+}
+
+function createStackRec(
+  tokens: string[],
+  stack: Array<string | boolean>,
+  index: number
+): number {
+  while (index < tokens.length) {
+    const token = tokens[index];
+
+    if (isBoolean(token)) {
+      stack.push(toBoolean(token));
+      ++index;
+
+      continue;
+    }
+
+    if (isOperation(token)) {
+      stack.push(token);
+      ++index;
+
+      continue;
+    }
+
+    if (isNegation(token)) {
+      const nextStack: Array<string | boolean> = [];
+      index = createStackRec(tokens, nextStack, index + 1);
+      stack.push(!evaluate(nextStack));
+
+      break;
+    }
+
+    if (isOpenParenthesis(token)) {
+      index = createParenthesisStack(tokens, stack, index + 1);
+      continue;
+    }
+
+    break;
+  }
+
+  return index;
+}
+
+function createParenthesisStack(
+  tokens: string[],
+  stack: Array<string | boolean>,
+  index: number
+): number {
+  const subExpression: Array<string | boolean> = [];
+
+  while (true) {
+    const token = tokens[index];
+
+    if (isOpenParenthesis(token)) {
+      index = createParenthesisStack(tokens, subExpression, index);
+      ++index;
+
+      continue;
+    }
+
+    if (isCloseParenthesis(token)) {
+      ++index;
+      break;
+    }
+
+    if (isBoolean(token)) {
+      subExpression.push(toBoolean(token));
+      ++index;
+      continue;
+    }
+
+    if (isOperation(token)) {
+      subExpression.push(token);
+      ++index;
+      continue;
+    }
+
+    if (isNegation(token)) {
+      const nextStack: Array<string | boolean> = [];
+      index = createStackRec(tokens, nextStack, index + 1);
+      subExpression.push(!evaluate(nextStack));
+    }
+  }
+
+  stack.push(evaluate(subExpression));
+
+  return index;
 }
 
 function createStack(tokens: string[]): Array<boolean | string> {
@@ -135,12 +224,6 @@ function createStack(tokens: string[]): Array<boolean | string> {
 
 function evaluate(stack: Array<string | boolean>): boolean {
   let result = stack.shift() as boolean;
-  // const resultAsStringOrBoolean = stack.shift();
-
-  // let result =
-  //   typeof resultAsStringOrBoolean === 'boolean'
-  //     ? resultAsStringOrBoolean
-  //     : toBoolean(resultAsStringOrBoolean as string);
 
   while (stack.length > 0) {
     const operator = stack.shift() as string;

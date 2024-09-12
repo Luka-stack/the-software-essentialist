@@ -96,5 +96,9 @@ describe('boolean calculator', () => {
     it('should return false for "not (true and true)"', () => {
       expect(calculateBoolean('not (true and true)')).toBe(false);
     });
+
+    it('should return true for "not (not (true and true))"', () => {
+      expect(calculateBoolean('not (not (true and true))')).toBe(true);
+    });
   });
 });
