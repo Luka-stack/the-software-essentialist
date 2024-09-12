@@ -61,4 +61,34 @@ describe('boolean calculator', () => {
       expect(calculateBoolean('true and not false')).toBe(true);
     });
   });
+
+  describe('parenthesis', () => {
+    it('should return true for "(true)"', () => {
+      expect(calculateBoolean('(true)')).toBe(true);
+    });
+
+    it('should return false for "(false)"', () => {
+      expect(calculateBoolean('(false)')).toBe(false);
+    });
+
+    it('should return true for "true and (true or false)"', () => {
+      expect(calculateBoolean('true and (true or false)')).toBe(true);
+    });
+
+    it('should return false for "true and (false or false)"', () => {
+      expect(calculateBoolean('true and (false or false)')).toBe(false);
+    });
+
+    it('should return true for "true and (not false)"', () => {
+      expect(calculateBoolean('true and (not false)')).toBe(true);
+    });
+
+    it('should return false for "true and (not true)"', () => {
+      expect(calculateBoolean('true and (not true)')).toBe(false);
+    });
+
+    it('should return false for "not (true and true)"', () => {
+      expect(calculateBoolean('not (true and true)')).toBe(false);
+    });
+  });
 });

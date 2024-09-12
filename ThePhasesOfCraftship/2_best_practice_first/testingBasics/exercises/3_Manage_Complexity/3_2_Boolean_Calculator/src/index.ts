@@ -35,6 +35,14 @@ function isOperation(value: string): boolean {
   return isAnd(value) || isOr(value);
 }
 
+function isOpenParenthesis(value: string): boolean {
+  return value === '(';
+}
+
+function isCloseParenthesis(value: string): boolean {
+  return value === ')';
+}
+
 function tokenize(expression: string): RegExpMatchArray | null {
   return expression.match(/\b(not|and|or|true|false)\b|\(|\)/g);
 }
@@ -50,11 +58,73 @@ function createStack(tokens: string[]): Array<boolean | string> {
       stack.push(toBoolean(token));
     } else if (isNegation(token)) {
       const nextToken = tokens[++index];
+
       if (isBoolean(nextToken)) {
         stack.push(!toBoolean(nextToken));
+      } else if (isOpenParenthesis(nextToken)) {
+        const subExpression: Array<string | boolean> = [];
+        let openParens = 1;
+
+        while (openParens > 0) {
+          const nextToken = tokens[++index];
+
+          if (isOpenParenthesis(nextToken)) {
+            openParens++;
+          } else if (isCloseParenthesis(nextToken)) {
+            openParens--;
+          }
+
+          if (openParens > 0) {
+            if (isBoolean(nextToken)) {
+              subExpression.push(toBoolean(nextToken));
+            } else if (isOperation(nextToken)) {
+              subExpression.push(nextToken);
+            } else if (isNegation(nextToken)) {
+              const nextToken2 = tokens[++index];
+
+              if (isBoolean(nextToken2)) {
+                subExpression.push(!toBoolean(nextToken2));
+              }
+            }
+          }
+        }
+
+        const result = evaluate(subExpression);
+        stack.push(!result);
       }
     } else if (isOperation(token)) {
       stack.push(token);
+    } else if (isOpenParenthesis(token)) {
+      const subExpression: Array<string | boolean> = [];
+      let openParens = 1;
+
+      while (openParens > 0) {
+        const nextToken = tokens[++index];
+
+        if (isOpenParenthesis(nextToken)) {
+          openParens++;
+        } else if (isCloseParenthesis(nextToken)) {
+          openParens--;
+        }
+
+        if (openParens > 0) {
+          if (isBoolean(nextToken)) {
+            subExpression.push(toBoolean(nextToken));
+          } else if (isOperation(nextToken)) {
+            subExpression.push(nextToken);
+          } else if (isNegation(nextToken)) {
+            const nextToken2 = tokens[++index];
+
+            if (isBoolean(nextToken2)) {
+              subExpression.push(!toBoolean(nextToken2));
+            }
+          }
+        }
+      }
+
+      stack.push(evaluate(subExpression));
+    } else if (isCloseParenthesis(token)) {
+      throw new Error('Unexpected close parenthesis');
     }
 
     ++index;
@@ -65,6 +135,12 @@ function createStack(tokens: string[]): Array<boolean | string> {
 
 function evaluate(stack: Array<string | boolean>): boolean {
   let result = stack.shift() as boolean;
+  // const resultAsStringOrBoolean = stack.shift();
+
+  // let result =
+  //   typeof resultAsStringOrBoolean === 'boolean'
+  //     ? resultAsStringOrBoolean
+  //     : toBoolean(resultAsStringOrBoolean as string);
 
   while (stack.length > 0) {
     const operator = stack.shift() as string;
