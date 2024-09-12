@@ -1,3 +1,4 @@
+import exp from 'constants';
 import { calculateBoolean } from './index';
 
 describe('boolean calculator', () => {
@@ -15,6 +16,11 @@ describe('boolean calculator', () => {
     it('should negate the next boolean value', () => {
       expect(calculateBoolean('not true')).toBe(false);
       expect(calculateBoolean('not false')).toBe(true);
+    });
+
+    it('should dobule negate the next boolean value', () => {
+      expect(calculateBoolean('not not true')).toBe(true);
+      expect(calculateBoolean('not not false')).toBe(false);
     });
   });
 
