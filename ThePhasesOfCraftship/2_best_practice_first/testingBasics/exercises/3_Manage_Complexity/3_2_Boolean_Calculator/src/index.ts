@@ -5,12 +5,27 @@ export function calculateBoolean(expression: string): boolean {
     return false;
   }
 
-  // const stack = createStack(tokens);
-  const stack: Array<string | boolean> = [];
-  createStackRec(tokens, stack, 0);
-  const result = evaluate(stack);
+  const result = evalExpression(tokens, new Index());
 
   return result;
+}
+
+class Index {
+  private _index = 0;
+
+  get index(): number {
+    return this._index;
+  }
+
+  increment(): Index {
+    this._index++;
+    return this;
+  }
+
+  decrement(): Index {
+    this._index--;
+    return this;
+  }
 }
 
 function toBoolean(value: string): boolean {
@@ -49,177 +64,78 @@ function tokenize(expression: string): RegExpMatchArray | null {
   return expression.match(/\b(not|and|or|true|false)\b|\(|\)/g);
 }
 
-function createStackRec(
-  tokens: string[],
-  stack: Array<string | boolean>,
-  index: number
-): number {
-  while (index < tokens.length) {
-    const token = tokens[index];
+function evalExpression(tokens: string[], index: Index): boolean {
+  const stack: Array<string | boolean> = [];
+
+  while (index.index < tokens.length) {
+    const token = tokens[index.index];
 
     if (isBoolean(token)) {
       stack.push(toBoolean(token));
-      ++index;
+      index.increment();
 
       continue;
     }
 
     if (isOperation(token)) {
       stack.push(token);
-      ++index;
+      index.increment();
 
       continue;
     }
 
     if (isNegation(token)) {
-      const nextStack: Array<string | boolean> = [];
-      index = createStackRec(tokens, nextStack, index + 1);
-      stack.push(!evaluate(nextStack));
+      stack.push(!evalExpression(tokens, index.increment()));
 
       break;
     }
 
     if (isOpenParenthesis(token)) {
-      index = createParenthesisStack(tokens, stack, index + 1);
+      stack.push(evaluateParenthesis(tokens, index.increment()));
       continue;
     }
 
     break;
   }
 
-  return index;
+  return evaluate(stack);
 }
 
-function createParenthesisStack(
-  tokens: string[],
-  stack: Array<string | boolean>,
-  index: number
-): number {
+function evaluateParenthesis(tokens: string[], index: Index): boolean {
   const subExpression: Array<string | boolean> = [];
 
   while (true) {
-    const token = tokens[index];
+    const token = tokens[index.index];
 
     if (isOpenParenthesis(token)) {
-      index = createParenthesisStack(tokens, subExpression, index);
-      ++index;
+      subExpression.push(evaluateParenthesis(tokens, index.increment()));
 
       continue;
     }
 
     if (isCloseParenthesis(token)) {
-      ++index;
+      index.increment();
       break;
     }
 
     if (isBoolean(token)) {
       subExpression.push(toBoolean(token));
-      ++index;
+      index.increment();
       continue;
     }
 
     if (isOperation(token)) {
       subExpression.push(token);
-      ++index;
+      index.increment();
       continue;
     }
 
     if (isNegation(token)) {
-      const nextStack: Array<string | boolean> = [];
-      index = createStackRec(tokens, nextStack, index + 1);
-      subExpression.push(!evaluate(nextStack));
+      subExpression.push(!evalExpression(tokens, index.increment()));
     }
   }
 
-  stack.push(evaluate(subExpression));
-
-  return index;
-}
-
-function createStack(tokens: string[]): Array<boolean | string> {
-  const stack: Array<boolean | string> = [];
-  let index = 0;
-
-  while (index < tokens.length) {
-    const token = tokens[index];
-
-    if (isBoolean(token)) {
-      stack.push(toBoolean(token));
-    } else if (isNegation(token)) {
-      const nextToken = tokens[++index];
-
-      if (isBoolean(nextToken)) {
-        stack.push(!toBoolean(nextToken));
-      } else if (isOpenParenthesis(nextToken)) {
-        const subExpression: Array<string | boolean> = [];
-        let openParens = 1;
-
-        while (openParens > 0) {
-          const nextToken = tokens[++index];
-
-          if (isOpenParenthesis(nextToken)) {
-            openParens++;
-          } else if (isCloseParenthesis(nextToken)) {
-            openParens--;
-          }
-
-          if (openParens > 0) {
-            if (isBoolean(nextToken)) {
-              subExpression.push(toBoolean(nextToken));
-            } else if (isOperation(nextToken)) {
-              subExpression.push(nextToken);
-            } else if (isNegation(nextToken)) {
-              const nextToken2 = tokens[++index];
-
-              if (isBoolean(nextToken2)) {
-                subExpression.push(!toBoolean(nextToken2));
-              }
-            }
-          }
-        }
-
-        const result = evaluate(subExpression);
-        stack.push(!result);
-      }
-    } else if (isOperation(token)) {
-      stack.push(token);
-    } else if (isOpenParenthesis(token)) {
-      const subExpression: Array<string | boolean> = [];
-      let openParens = 1;
-
-      while (openParens > 0) {
-        const nextToken = tokens[++index];
-
-        if (isOpenParenthesis(nextToken)) {
-          openParens++;
-        } else if (isCloseParenthesis(nextToken)) {
-          openParens--;
-        }
-
-        if (openParens > 0) {
-          if (isBoolean(nextToken)) {
-            subExpression.push(toBoolean(nextToken));
-          } else if (isOperation(nextToken)) {
-            subExpression.push(nextToken);
-          } else if (isNegation(nextToken)) {
-            const nextToken2 = tokens[++index];
-
-            if (isBoolean(nextToken2)) {
-              subExpression.push(!toBoolean(nextToken2));
-            }
-          }
-        }
-      }
-
-      stack.push(evaluate(subExpression));
-    } else if (isCloseParenthesis(token)) {
-      throw new Error('Unexpected close parenthesis');
-    }
-
-    ++index;
-  }
-
-  return stack;
+  return evaluate(subExpression);
 }
 
 function evaluate(stack: Array<string | boolean>): boolean {
