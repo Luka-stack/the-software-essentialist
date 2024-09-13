@@ -1,7 +1,24 @@
-import exp from 'constants';
 import { calculateBoolean } from './index';
 
 describe('boolean calculator', () => {
+  describe('invalid expressions', () => {
+    it('should throw an error for an empty string', () => {
+      expect(() => calculateBoolean('')).toThrowError('Invalid expression');
+    });
+
+    it('should throw an error for an invalid token', () => {
+      expect(() => calculateBoolean('invalid')).toThrowError(
+        'Invalid expression'
+      );
+    });
+
+    it('should throw an error for an invalid operation', () => {
+      expect(() => calculateBoolean('true invalid true')).toThrowError(
+        'Invalid expression'
+      );
+    });
+  });
+
   describe('single values', () => {
     it('should return true for "true"', () => {
       expect(calculateBoolean('true')).toBe(true);

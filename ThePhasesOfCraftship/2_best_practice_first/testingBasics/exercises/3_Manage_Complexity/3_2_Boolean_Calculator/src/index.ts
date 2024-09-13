@@ -61,7 +61,20 @@ function isCloseParenthesis(value: string): boolean {
 }
 
 function tokenize(expression: string): RegExpMatchArray | null {
-  return expression.match(/\b(not|and|or|true|false)\b|\(|\)/g);
+  const validTokens = /\b(not|and|or|true|false)\b|\(|\)/g;
+  const tokens = expression.match(validTokens);
+
+  if (!tokens) {
+    throw new Error('Invalid expression');
+  }
+
+  const invalidTokens = expression.replace(validTokens, '').trim();
+
+  if (invalidTokens.length > 0) {
+    throw new Error('Invalid expression');
+  }
+
+  return tokens;
 }
 
 function evalExpression(tokens: string[], index: Index): boolean {
